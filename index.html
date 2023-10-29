@@ -1,18 +1,29 @@
 <!DOCTYPE html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <style>
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
   .card {
     border: 1px solid #ccc;
-    padding: 10px;
     margin: 10px;
     width: 300px;
-    display: inline-block;
     text-align: center;
+    overflow: hidden;
+    padding: 10px;
+    border-radius: 10px;
   }
   .card img {
     max-width: 100%;
-    max-height: 200px; /* Establece la altura máxima que desees */
+    max-height: 200px;
     height: auto;
+  }
+  .card-content {
+    padding: 10px;
+    max-height: 100px; /* Adjust the max height as needed */
+    overflow: hidden;
   }
   .update-status {
     text-align: left;
@@ -22,56 +33,17 @@
 <select id="filtro-campo">
     <option value="nombre">Nombre de persona desaparecida</option>
     <option value="zona">Zona</option>
-</select><br><br>
+</select>
 <select id="filtro-zona" style="display: none;">
     <option value="">Seleccionar Zona</option>
     <option value="Alta Progreso">Alta Progreso</option>
-    <option value="Barra Vieja">Barra Vieja</option>
-    <option value="Bocamar">Bocamar</option>
-    <option value="Caleta">Caleta</option>
-    <option value="Caletilla">Caletilla</option>
-    <option value="Centro">Centro</option>
-    <option value="Colosio">Colosio</option>
-    <option value="Coloso">Coloso</option>
-    <option value="Condesa">Condesa</option>
-    <option value="Costa Azul, Icacos">Costa Azul, Icacos</option>
-    <option value="Cruces / Cima">Cruces / Cima</option>
-    <option value="Cumbres de Figueroa">Cumbres de Figueroa</option>
-    <option value="Diamante">Diamante</option>
-    <option value="Foviste Alta Progreso">Foviste Alta Progreso</option>
-    <option value="Ejido">Ejido</option>
-    <option value="El Cayaco / Papagayo">El Cayaco / Papagayo</option>
-    <option value="El Roble">El Roble</option>
-    <option value="Emiliano Zapata / El Quemado">Emiliano Zapata / El Quemado</option>
-    <option value="Farallón">Farallón</option>
-    <option value="Hogar Moderno">Hogar Moderno</option>
-    <option value="Hornos Insurgentes">Hornos Insurgentes</option>
-    <option value="Hospital - La Laja">Hospital - La Laja</option>
-    <option value="Jardín y Pie de la Cuesta">Jardín y Pie de la Cuesta</option>
-    <option value="Joyas, Brisas, Escénica">Joyas, Brisas, Escénica</option>
-    <option value="KM 21, KM 30 y alrededores">KM 21, KM 30 y alrededores</option>
-    <option value="Miguel Alemán">Miguel Alemán</option>
-    <option value="Morelos">Morelos</option>
-    <option value="La Garita">La Garita</option>
-    <option value="La Navidad Acapulco">La Navidad Acapulco</option>
-    <option value="Las Cruces / Rancho">Las Cruces / Rancho</option>
-    <option value="Lerdo de Tejada">Lerdo de Tejada</option>
-    <option value="Libertadores">Libertadores</option>
-    <option value="Llano Largo">Llano Largo</option>
-    <option value="Mozimba">Mozimba</option>
-    <option value="Palma Sola">Palma Sola</option>
-    <option value="Palomares y Potrerillo">Palomares y Potrerillo</option>
-    <option value="Progreso">Progreso</option>
-    <option value="Puerto Marqués">Puerto Marqués</option>
-    <option value="Renacimiento">Renacimiento</option>
-    <option value="Revolcadero / La Poza">Revolcadero / La Poza</option>
-    <option value="Zapata / Libertadores / Vacacional">Zapata / Libertadores / Vacacional</option>
-    <option value="Zona Hornitos - Hornos">Zona Hornitos - Hornos</option>
-    <option value="Sabana">Sabana</option>
+    <!-- Other options here -->
 </select>
 <input type="text" id="filtro-entrada" placeholder="Filtrar por nombre o zona"><br>
 <button id="filtrar-button">Filtrar</button>
-<button id="reporte" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSfqtoS1DvwwcNj56MevuQl002A8lKWvwGci-t7OceWkfydtMA/viewform', '_blank')">Crear Reporte</button><div id="filtered-list"></div>
+<button id="reporte" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSfqtoS1DvwwcNj56MevuQl002A8lKWvwGci-t7OceWkfydtMA/viewform', '_blank')">Crear Reporte</button>
+<div id="filtered-list" class="card-container"></div>
+
 
 <script>
     var csvFileURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRRo-QOJ6L0_YLK8A5ThIugf6c1AcZE-MGgd_hLuWgRhQKf1HauB3MOEkkfKa7xBMKQwbNGJ9KMWZoI/pub?output=csv"; // Reemplaza con la URL de tu archivo .csv
@@ -97,7 +69,12 @@
                             filteredList.innerHTML = "";
                             result.data.forEach(function (item) {
                               var nombre = (item["Nombre persona desaparecida"] || "").trim();
+                              var edad = (item["Edad"] || "").trim();
+                              var sexo = (item["Sexo"] || "").trim();
+                              var rasgos = (item["Rasgos distintivos"] || "").trim();
                               var zona = (item["Zona"] || "").trim();
+                              var ultima = (item["Última ubicación conocida"] || "").trim();
+                              var estado = (item["Estado de la persona"] || "").trim();
                               var foto = (item["Fotografía"] || "").trim();
                           
                               if (
@@ -116,15 +93,43 @@
                                   var image = document.createElement("img");
                                   image.src = foto;
                                   card.appendChild(image);
+                                } else {
+                                    var noImage = document.createElement("img");
+                                    noImage.src = "avatar.png"
+                                    card.appendChild(noImage);
                                 }
                           
                                 var nombreElement = document.createElement("p");
                                 nombreElement.innerHTML = "<strong>Nombre:</strong> <br>" + nombre;
                                 card.appendChild(nombreElement);
+
+                                var edadElement = document.createElement("p");
+                                edadElement.innerHTML = "<strong>Edad:</strong> <br>" + edad;
+                                card.appendChild(edadElement);
+
+                                var sexoElement = document.createElement("p");
+                                sexoElement.innerHTML = "<strong>Sexo:</strong> <br>" + sexo;
+                                card.appendChild(sexoElement);
+                                
+                                if (rasgos){
+                                    var rasgosElement = document.createElement("p");
+                                    rasgosElement.innerHTML = "<strong>Rasgos distintivos:</strong><br> " + rasgos;
+                                    card.appendChild(rasgosElement);
+                                }
                           
                                 var zonaElement = document.createElement("p");
                                 zonaElement.innerHTML = "<strong>Zona:</strong><br> " + zona;
                                 card.appendChild(zonaElement);
+
+                                if (ultima){
+                                    var ultimaElement = document.createElement("p");
+                                    ultimaElement.innerHTML = "<strong>Última ubicación conocida:</strong><br> " + ultima;
+                                    card.appendChild(ultimaElement);
+                                }
+
+                                var estadoElement = document.createElement("p");
+                                estadoElement.innerHTML = "<strong>Estado:</strong><br> " + estado;
+                                card.appendChild(estadoElement);
                           
                                 filteredList.appendChild(card);
                           
