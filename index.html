@@ -76,6 +76,7 @@
                               var ultima = (item["Última ubicación conocida"] || "").trim();
                               var estado = (item["Estado de la persona"] || "").trim();
                               var foto = (item["Fotografía"] || "").trim();
+                              var numero = (item["Número de teléfono de contacto"] || "").trim();
                           
                               if (
                                 (filtroCampo.value === "nombre" && new RegExp(filtro, 'i').test(nombre)) ||
@@ -130,6 +131,10 @@
                                 var estadoElement = document.createElement("p");
                                 estadoElement.innerHTML = "<strong>Estado:</strong><br> " + estado;
                                 card.appendChild(estadoElement);
+
+                                var numeroElement = document.createElement("p");
+                                numeroElement.innerHTML = "<strong>En caso de localizar, contactar al número:</strong><br> " + numero;
+                                card.appendChild(numeroElement);
                           
                                 filteredList.appendChild(card);
                           
