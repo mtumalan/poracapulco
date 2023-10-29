@@ -1,0 +1,32 @@
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.card {
+  border: 1px solid #ccc;
+  margin: 10px;
+  width: 300px;
+  text-align: center;
+  overflow: hidden;
+  padding: 10px;
+  border-radius: 10px;
+}
+.card img {
+  max-width: 100%;
+  max-height: 200px;
+  height: auto;
+}
+.card-content {
+  padding: 10px;
+  max-height: 100px; /* Adjust the max height as needed */
+  overflow: hidden;
+}
+.update-status {
+  text-align: left;
+}
+
+.search-container {
+  display: "flex";
+  justify-content: "center";
+}

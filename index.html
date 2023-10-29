@@ -1,229 +1,100 @@
 <!DOCTYPE html>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-<style>
-  .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .card {
-    border: 1px solid #ccc;
-    margin: 10px;
-    width: 300px;
-    text-align: center;
-    overflow: hidden;
-    padding: 10px;
-    border-radius: 10px;
-  }
-  .card img {
-    max-width: 100%;
-    max-height: 200px;
-    height: auto;
-  }
-  .card-content {
-    padding: 10px;
-    max-height: 100px; /* Adjust the max height as needed */
-    overflow: hidden;
-  }
-  .update-status {
-    text-align: left;
-  }
-</style>
-<div id="data-list"></div>
-<select id="filtro-campo">
-    <option value="nombre">Nombre de persona desaparecida</option>
-    <option value="zona">Zona</option>
-</select>
-<select id="filtro-zona" style="display: none;">
-    <option value="">Seleccionar Zona</option>
-    <option value="Alta Progreso">Alta Progreso</option>
-    <option value="Barra Vieja">Barra Vieja</option>
-    <option value="Bocamar">Bocamar</option>
-    <option value="Caleta">Caleta</option>
-    <option value="Caletilla">Caletilla</option>
-    <option value="Centro">Centro</option>
-    <option value="Colosio">Colosio</option>
-    <option value="Coloso">Coloso</option>
-    <option value="Condesa">Condesa</option>
-    <option value="Costa Azul, Icacos">Costa Azul, Icacos</option>
-    <option value="Cruces / Cima">Cruces / Cima</option>
-    <option value="Cumbres de Figueroa">Cumbres de Figueroa</option>
-    <option value="Diamante">Diamante</option>
-    <option value="Foviste Alta Progreso">Foviste Alta Progreso</option>
-    <option value="Ejido">Ejido</option>
-    <option value="El Cayaco / Papagayo">El Cayaco / Papagayo</option>
-    <option value="El Roble">El Roble</option>
-    <option value="Emiliano Zapata / El Quemado">Emiliano Zapata / El Quemado</option>
-    <option value="Farallón">Farallón</option>
-    <option value="Hogar Moderno">Hogar Moderno</option>
-    <option value="Hornos Insurgentes">Hornos Insurgentes</option>
-    <option value="Hospital - La Laja">Hospital - La Laja</option>
-    <option value="Jardín y Pie de la Cuesta">Jardín y Pie de la Cuesta</option>
-    <option value="Joyas, Brisas, Escénica">Joyas, Brisas, Escénica</option>
-    <option value="KM 21, KM 30 y alrededores">KM 21, KM 30 y alrededores</option>
-    <option value="Miguel Alemán">Miguel Alemán</option>
-    <option value="Morelos">Morelos</option>
-    <option value="La Garita">La Garita</option>
-    <option value="La Navidad Acapulco">La Navidad Acapulco</option>
-    <option value="Las Cruces / Rancho">Las Cruces / Rancho</option>
-    <option value="Lerdo de Tejada">Lerdo de Tejada</option>
-    <option value="Libertadores">Libertadores</option>
-    <option value="Llano Largo">Llano Largo</option>
-    <option value="Mozimba">Mozimba</option>
-    <option value="Palma Sola">Palma Sola</option>
-    <option value="Palomares y Potrerillo">Palomares y Potrerillo</option>
-    <option value="Progreso">Progreso</option>
-    <option value="Puerto Marqués">Puerto Marqués</option>
-    <option value="Renacimiento">Renacimiento</option>
-    <option value="Revolcadero / La Poza">Revolcadero / La Poza</option>
-    <option value="Zapata / Libertadores / Vacacional">Zapata / Libertadores / Vacacional</option>
-    <option value="Zona Hornitos - Hornos">Zona Hornitos - Hornos</option>
-    <option value="Sabana">Sabana</option>
-</select>
-<input type="text" id="filtro-entrada" placeholder="Filtrar por nombre"><br>
-<button id="filtrar-button">Filtrar</button>
-<button id="reporte" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSfqtoS1DvwwcNj56MevuQl002A8lKWvwGci-t7OceWkfydtMA/viewform', '_blank')">Crear Reporte</button>
-<div id="filtered-list" class="card-container"></div>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Busca personas en Acapulco</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link rel="stylesheet" href="./assets/styles/global.css" />
+  </head>
+  <body>
+    <main class="lg:container">
+      <div id="data-list"></div>
 
+      <div class="flex flex-col mx-4 gap-2 lg:flex-row lg:mx-auto my-8 self-center justify-around">
+        <div class="flex flex-col gap-2 w-full lg:flex-row lg:w-2/4">
+          <select
+            id="filtro-campo"
+          >
+            <option value="nombre">Nombre de persona</option>
+            <option value="zona">Zona</option>
+          </select>
+          <select id="filtro-zona" style="display: none">
+            <option value="">Seleccionar Zona</option>
+            <option value="Alta Progreso">Alta Progreso</option>
+            <option value="Barra Vieja">Barra Vieja</option>
+            <option value="Bocamar">Bocamar</option>
+            <option value="Caleta">Caleta</option>
+            <option value="Caletilla">Caletilla</option>
+            <option value="Centro">Centro</option>
+            <option value="Colosio">Colosio</option>
+            <option value="Coloso">Coloso</option>
+            <option value="Condesa">Condesa</option>
+            <option value="Costa Azul, Icacos">Costa Azul, Icacos</option>
+            <option value="Cruces / Cima">Cruces / Cima</option>
+            <option value="Cumbres de Figueroa">Cumbres de Figueroa</option>
+            <option value="Diamante">Diamante</option>
+            <option value="Foviste Alta Progreso">Foviste Alta Progreso</option>
+            <option value="Ejido">Ejido</option>
+            <option value="El Cayaco / Papagayo">El Cayaco / Papagayo</option>
+            <option value="El Roble">El Roble</option>
+            <option value="Emiliano Zapata / El Quemado">
+              Emiliano Zapata / El Quemado
+            </option>
+            <option value="Farallón">Farallón</option>
+            <option value="Hogar Moderno">Hogar Moderno</option>
+            <option value="Hornos Insurgentes">Hornos Insurgentes</option>
+            <option value="Hospital - La Laja">Hospital - La Laja</option>
+            <option value="Jardín y Pie de la Cuesta">
+              Jardín y Pie de la Cuesta
+            </option>
+            <option value="Joyas, Brisas, Escénica">
+              Joyas, Brisas, Escénica
+            </option>
+            <option value="KM 21, KM 30 y alrededores">
+              KM 21, KM 30 y alrededores
+            </option>
+            <option value="Miguel Alemán">Miguel Alemán</option>
+            <option value="Morelos">Morelos</option>
+            <option value="La Garita">La Garita</option>
+            <option value="La Navidad Acapulco">La Navidad Acapulco</option>
+            <option value="Las Cruces / Rancho">Las Cruces / Rancho</option>
+            <option value="Lerdo de Tejada">Lerdo de Tejada</option>
+            <option value="Libertadores">Libertadores</option>
+            <option value="Llano Largo">Llano Largo</option>
+            <option value="Mozimba">Mozimba</option>
+            <option value="Palma Sola">Palma Sola</option>
+            <option value="Palomares y Potrerillo">
+              Palomares y Potrerillo
+            </option>
+            <option value="Progreso">Progreso</option>
+            <option value="Puerto Marqués">Puerto Marqués</option>
+            <option value="Renacimiento">Renacimiento</option>
+            <option value="Revolcadero / La Poza">Revolcadero / La Poza</option>
+            <option value="Zapata / Libertadores / Vacacional">
+              Zapata / Libertadores / Vacacional
+            </option>
+            <option value="Zona Hornitos - Hornos">
+              Zona Hornitos - Hornos
+            </option>
+            <option value="Sabana">Sabana</option>
+          </select>
+          <input
+            type="search"
+            id="filtro-entrada"
+            class="w-full"
+            placeholder="Filtrar por nombre"
+          />
+          <button id="filtrar-button" class="bg-black text-white rounded-md py-4 px-8">Filtrar</button>
+        </div>
 
-<script>
-    var csvFileURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRRo-QOJ6L0_YLK8A5ThIugf6c1AcZE-MGgd_hLuWgRhQKf1HauB3MOEkkfKa7xBMKQwbNGJ9KMWZoI/pub?output=csv"; // Reemplaza con la URL de tu archivo .csv
+        <button id="reporte" class="bg-black text-white mt-8 lg:mt-0 rounded-md py-4 px-8">Crear Reporte</button>
+      </div>
 
-    function cargarDatos() {
-        fetch(csvFileURL)
-            .then(function (response) {
-                return response.text();
-            })
-            .then(function (data) {
-                Papa.parse(data, {
-                    header: true, // Si la primera fila del archivo .csv contiene encabezados de columna
-                    complete: function (result) {
-                        var dataList = document.getElementById("data-list");
-                        var filteredList = document.getElementById("filtered-list");
-                        var filtroCampo = document.getElementById("filtro-campo");
-                        var filtroEntrada = document.getElementById("filtro-entrada");
-                        var filtrarButton = document.getElementById("filtrar-button");
-                        var filtroZona = document.getElementById("filtro-zona");
+      <div id="filtered-list" class="card-container"></div>
+    </main>
 
-
-                        function actualizarLista(filtro) {
-                            filteredList.innerHTML = "";
-                            result.data.forEach(function (item) {
-                              var nombre = (item["Nombre persona desaparecida"] || "").trim();
-                              var edad = (item["Edad"] || "").trim();
-                              var sexo = (item["Sexo"] || "").trim();
-                              var rasgos = (item["Rasgos distintivos"] || "").trim();
-                              var zona = (item["Zona"] || "").trim();
-                              var ultima = (item["Última ubicación conocida"] || "").trim();
-                              var estado = (item["Estado de la persona"] || "").trim();
-                              var foto = (item["Fotografía"] || "").trim();
-                              var numero = (item["Número de teléfono de contacto"] || "").trim();
-                          
-                              if (
-                                (filtroCampo.value === "nombre" && new RegExp(filtro, 'i').test(nombre)) ||
-                                (filtroCampo.value === "zona" && new RegExp(filtro, 'i').test(zona))
-                              ) {
-                                var card = document.createElement("div");
-                                card.className = "card";
-                          
-                                // Transform the Google Drive URL if needed
-                                if (foto && foto.includes("drive.google.com/open?id=")) {
-                                  foto = transformarURLGoogleDrive(foto);
-                                }
-                          
-                                if (foto) {
-                                  var image = document.createElement("img");
-                                  image.src = foto;
-                                  card.appendChild(image);
-                                } else {
-                                    var noImage = document.createElement("img");
-                                    noImage.src = "avatar.png"
-                                    card.appendChild(noImage);
-                                }
-                          
-                                var nombreElement = document.createElement("p");
-                                nombreElement.innerHTML = "<strong>Nombre:</strong> <br>" + nombre;
-                                card.appendChild(nombreElement);
-
-                                var edadElement = document.createElement("p");
-                                edadElement.innerHTML = "<strong>Edad:</strong> <br>" + edad;
-                                card.appendChild(edadElement);
-
-                                var sexoElement = document.createElement("p");
-                                sexoElement.innerHTML = "<strong>Sexo:</strong> <br>" + sexo;
-                                card.appendChild(sexoElement);
-                                
-                                if (rasgos){
-                                    var rasgosElement = document.createElement("p");
-                                    rasgosElement.innerHTML = "<strong>Rasgos distintivos:</strong><br> " + rasgos;
-                                    card.appendChild(rasgosElement);
-                                }
-                          
-                                var zonaElement = document.createElement("p");
-                                zonaElement.innerHTML = "<strong>Zona:</strong><br> " + zona;
-                                card.appendChild(zonaElement);
-
-                                if (ultima){
-                                    var ultimaElement = document.createElement("p");
-                                    ultimaElement.innerHTML = "<strong>Última ubicación conocida:</strong><br> " + ultima;
-                                    card.appendChild(ultimaElement);
-                                }
-
-                                var estadoElement = document.createElement("p");
-                                estadoElement.innerHTML = "<strong>Estado:</strong><br> " + estado;
-                                card.appendChild(estadoElement);
-
-                                var numeroElement = document.createElement("p");
-                                numeroElement.innerHTML = "<strong>En caso de localizar, contactar al número:</strong><br> " + numero;
-                                card.appendChild(numeroElement);
-                          
-                                filteredList.appendChild(card);
-                          
-                              }
-                            });
-                          }
-                          
-                        filtrarButton.addEventListener("click", function () {
-                            if (filtroCampo.value === "nombre") {
-                              var filtro = filtroEntrada.value;
-                              actualizarLista(filtro);
-                            } else if (filtroCampo.value === "zona") {
-                              var filtro = filtroZona.value;
-                              actualizarLista(filtro);
-                            }
-                        });
-
-                            // Detect changes in the filtering method
-                        filtroCampo.addEventListener("change", function () {
-                            if (filtroCampo.value === "zona") {
-                                // If Zona is selected, show the Zona selector
-                                filtroZona.style.display = "block";
-                                filtroEntrada.style.display = "none";
-                                filtroEntrada.value = "";
-                                var filtro = filtroZona.value;
-                                actualizarLista(filtro);
-                            } else {
-                                // Otherwise, hide the Zona selector
-                                filtroZona.style.display = "none";
-                                filtroEntrada.style.display = "block";
-                                filtroEntrada.value = "";
-                                var filtro = filtroEntrada.value;
-                                actualizarLista(filtro);
-                            }
-                        });
-
-                    // Mostrar todos los datos al cargar la página
-                    actualizarLista("");
-                    },
-                });
-            });
-    }
-
-    // Función para transformar la URL de Google Drive
-    function transformarURLGoogleDrive(url) {
-        var regex = /https:\/\/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/;
-        return url.replace(regex, "https://drive.google.com/uc?export=view&id=$1");
-    }
-
-    cargarDatos();
-</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="./assets/js/main.js"></script>
+  </body>
+</html>
