@@ -11,7 +11,7 @@ var dataList,
   errorMessage;
 
 var csvFileURL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRRo-QOJ6L0_YLK8A5ThIugf6c1AcZE-MGgd_hLuWgRhQKf1HauB3MOEkkfKa7xBMKQwbNGJ9KMWZoI/pub?output=csv"; // Reemplaza con la URL de tu archivo .csv
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRRo-QOJ6L0_YLK8A5ThIugf6c1AcZE-MGgd_hLuWgRhQKf1HauB3MOEkkfKa7xBMKQwbNGJ9KMWZoI/pub?output=csv";
 
 function abreNuevoReporte() {
   window.open(
@@ -142,7 +142,7 @@ function renderLista() {
         slug +
         " " +
         zonaSlug +
-        " card bg-white border-2 border-gray-200 rounded-lg shadow-sm hover:shadow-md";
+        "card bg-white border-2 border-gray-200 rounded-lg shadow-sm hover:shadow-md flex flex-col";
 
       // Transform the Google Drive URL if needed
       if (foto && foto.includes("drive.google.com/open?id=")) {
