@@ -32,31 +32,31 @@ function createSlug(value, separator) {
     .replace(/\W/g, separator || " ");
 }
 
-function resetResults() {
-  const elements = document.querySelectorAll(".card");
+function resetResultList() {
+  var elements = document.querySelectorAll(".card");
 
   // Quita mensaje no encontrado
   errorMessage && errorMessage.classList.add("hidden");
 
-  for (let index = 0; index < elements.length; index++) {
+  for (var index = 0; index < elements.length; index++) {
     const item = elements[index];
-
     item.classList.remove("hidden");
   }
 }
 
 function filtrarLista(filtro) {
-  resetResults();
+  resetResultList();
 
-  if (!filtro || filtro.length < 1) {
-    return;
-  }
+  var esPorNombre = filtroCampo.value === "nombre";
+  var esPorZona = filtroCampo.value === "zona";
+
+  if (!filtro || filtro.length < 1) return;
 
   // Reset
   filtered = [];
 
   // Remplaza caracteres especiales.
-  if (filtroCampo.value === "nombre") {
+  if (esPorNombre) {
     var cleanName = createSlug(filtro.trim(), " ");
     var tokens = cleanName.split(" ");
     // Crea regexp: /text1|texto2|..n/ig
@@ -64,31 +64,53 @@ function filtrarLista(filtro) {
 
     for (var i = 0; i < personas.length; i++) {
       var persona = personas[i];
-      var nombre = persona.cleanName;
 
       // Oculta los no encontrados
-      if (!nombre.match(regex)) {
-        document.querySelector("." + persona.slug).classList.add("hidden");
+      if (!persona.cleanName.match(regex)) {
+        document
+          .querySelectorAll("." + persona.slug)
+          .forEach((item) => item.classList.add("hidden"));
       } else {
         filtered.push(persona);
       }
     }
+  } else if (esPorZona) {
+    var zone = createSlug(filtro.trim(), "-");
 
-    if (filtered.length < 1) {
-      // alert("No se encontraron resultados")
-      errorMessage && errorMessage.classList.remove("hidden");
-    } else {
-      errorMessage && errorMessage.classList.add("hidden");
+    for (var i = 0; i < personas.length; i++) {
+      var persona = personas[i];
+      var match = persona.zonaSlug.match(zone);
+
+      // Oculta los no encontrados
+      if (!!match) {
+        filtered.push(persona);
+      } else {
+        // Oculta la tarjeta de la persona sin match
+        document
+          .querySelectorAll("." + persona.slug)
+          .forEach((item) => item.classList.add("hidden"));
+      }
     }
-  } else {
-    // (filtroCampo.value === "zona" && new RegExp(filtro, "i").test(zona)
   }
+
+  if (filtered.length < 1) {
+    errorMessage && errorMessage.classList.remove("hidden");
+  } else {
+    errorMessage && errorMessage.classList.add("hidden");
+  }
+}
+
+function handleFiltrarLista() {
+  var filtro =
+    filtroCampo.value === "nombre" ? filtroEntrada.value : filtroZona.value;
+
+  filtrarLista(filtro.trim());
 }
 
 function onFormSubmit(e) {
   e.preventDefault();
 
-  filtrarLista(filtroEntrada.value.trim());
+  handleFiltrarLista();
 }
 
 function renderLista() {
@@ -111,8 +133,8 @@ function renderLista() {
       var zonaSlug = createSlug(zona, "-");
 
       // Agrega slugs
-      item.cleanName = createSlug(nombre, " ");
       item.slug = slug;
+      item.cleanName = createSlug(nombre, " ");
       item.zonaSlug = zonaSlug;
 
       var card = document.createElement("div");
@@ -191,13 +213,6 @@ function renderLista() {
   }
 }
 
-function handleFiltrarLista() {
-  var filtro =
-    filtroCampo.value === "nombre" ? filtroEntrada.value : filtroZona.value;
-
-  filtrarLista(filtro);
-}
-
 // Detect changes in the filtering method
 function alCambiarTipo() {
   if (filtroCampo.value === "zona") {
@@ -244,7 +259,7 @@ function transformarURLGoogleDrive(url) {
 
 function onClear(text) {
   if (text.length < 1) {
-    resetResults();
+    resetResultList();
   }
 }
 
