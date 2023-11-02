@@ -114,6 +114,9 @@ function onFormSubmit(e) {
 }
 
 function renderLista() {
+  // orden cronológico inverso.
+  personas = personas.reverse();
+
   if (personas && personas.length > 0) {
     for (var index = 0; index < personas.length; index++) {
       const item = personas[index];
