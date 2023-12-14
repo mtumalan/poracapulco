@@ -16,10 +16,6 @@ This project is a web-based platform developed to assist in the Hurricane Otis c
 - CSS
 - JavaScript
 
-## License
-
-This project is licensed under the [MIT Licence]
-
 ## Acknowledgments
 
 - Special thanks to Luis Abarca for important contributions to this project.
