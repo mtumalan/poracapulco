@@ -150,14 +150,16 @@ function renderLista() {
       // Transform the Google Drive URL if needed
       if (foto && foto.includes("drive.google.com/open?id=")) {
         foto = transformarURLGoogleDrive(foto);
+        console.log(foto);
       }
 
-      var image = document.createElement("img");
-      image.src = foto ? foto : "avatar.png";
-      image.classList =
+      var iframe = document.createElement("iframe");
+      iframe.src = foto ? foto : "";
+      iframe.classList =
         "w-full aspect-square object-contain h-auto" +
-        (foto ? "" : " hidden md:block"); // Oculta fotos en mobile
-      card.appendChild(image);
+        (foto ? "" : " hidden md:block"); // Oculta iframe en mobile si no hay foto
+      iframe.allow = "fullscreen"; // Allow fullscreen if needed
+      card.appendChild(iframe);
 
       var cardBody = document.createElement("div");
       cardBody.classList = "p-4";
@@ -256,8 +258,22 @@ function cargarDatos() {
 
 // Función para transformar la URL de Google Drive
 function transformarURLGoogleDrive(url) {
-  var regex = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\//;
-  return url.replace(regex, "https://drive.google.com/uc?export=view&id=$1");
+  // Match either 'open?id=' or 'file/d/'
+  var regexOpen = /https:\/\/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/;
+  var regexFile = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\//;
+  
+  // Check if the URL matches the 'open?id=' format
+  if (regexOpen.test(url)) {
+    return url.replace(regexOpen, "https://drive.google.com/file/d/$1/preview");
+  }
+  
+  // Check if the URL matches the 'file/d/' format
+  if (regexFile.test(url)) {
+    return url.replace(regexFile, "https://drive.google.com/file/d/$1/preview");
+  }
+
+  // If no match is found, return the original URL
+  return url;
 }
 
 function onClear(text) {
