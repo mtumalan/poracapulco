@@ -121,7 +121,10 @@ function renderLista() {
     for (var index = 0; index < personas.length; index++) {
       const item = personas[index];
 
-      var nombre = (item["Nombre persona desaparecida"] || "").trim();
+      console.log("item: ", index, ": ", item)
+
+      var colonia = (item["Colonia"] || "").trim();
+      var direccionLugar = (item["Dirección del lugar"] || "").trim();
       var edad = (item["Edad"] || "").trim();
       var sexo = (item["Sexo"] || "").trim();
       var rasgos = (item["Rasgos distintivos"] || "").trim();
@@ -132,12 +135,12 @@ function renderLista() {
       var numero = (item["Número de teléfono de contacto"] || "").trim();
 
       // Remplaza caracteres especiales.
-      var slug = createSlug(nombre, "-");
+      var slug = createSlug(direccionLugar, "-");
       var zonaSlug = createSlug(zona, "-");
 
       // Agrega slugs
       item.slug = slug;
-      item.cleanName = createSlug(nombre, " ");
+      item.cleanName = createSlug(direccionLugar, " ");
       item.zonaSlug = zonaSlug;
 
       var card = document.createElement("div");
@@ -151,7 +154,6 @@ function renderLista() {
 
       var image = document.createElement("img");
       image.src = foto ? foto : "avatar.png";
-      image.classList =
       image.classList = "w-full aspect-square object-contain h-auto";
       card.appendChild(image);
 
@@ -159,10 +161,17 @@ function renderLista() {
       cardBody.classList.add("p-4"); // Tailwind padding for card body
       card.appendChild(cardBody);
 
-      var nombreElement = document.createElement("h3");
-      nombreElement.innerHTML = nombre;
-      nombreElement.classList.add("py-2", "text-xl", "font-semibold"); // Tailwind for typography
-      cardBody.appendChild(nombreElement);
+      var colonia = document.createElement("h3");
+      colonia.innerHTML = "<strong>Colonia:</strong> " + colonia;
+
+      colonia.classList.add("py-2", "text-xl", "font-semibold"); // Tailwind for typography
+      cardBody.appendChild(colonia);
+
+      var direccion = document.createElement("h4");
+      direccion.innerHTML = "<strong>Dirección: </strong> " + direccionLugar;
+
+      direccion.classList.add("py-2", "text-xl", "font-semibold"); // Tailwind for typography
+      cardBody.appendChild(direccion);
 
       var grid = document.createElement("div");
       grid.classList.add("grid", "grid-cols-3", "my-3"); // Tailwind grid
