@@ -259,20 +259,16 @@ function cargarDatos() {
     });
 }
 
-// Función para transformar la URL de Google Drive
 function transformarURLGoogleDrive(url) {
-  // Match either 'open?id=' or 'file/d/'
-  var regexOpen = /https:\/\/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/;
-  var regexFile = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\//;
-  
-  // Check if the URL matches the 'open?id=' format
-  if (regexOpen.test(url)) {
-    return url.replace(regexOpen, "https://drive.google.com/file/d/$1/preview");
-  }
-  
-  // Check if the URL matches the 'file/d/' format
-  if (regexFile.test(url)) {
-    return url.replace(regexFile, "https://drive.google.com/file/d/$1/preview");
+  // Match both 'open?id=' or 'file/d/' formats in the same regex
+  var regex = /https:\/\/drive\.google\.com\/(?:open\?id=|file\/d\/)([a-zA-Z0-9_-]+)/;
+
+  // Check if the URL matches either of the formats
+  var match = url.match(regex);
+
+  // If a match is found, return the transformed thumbnail URL with size
+  if (match) {
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
   }
 
   // If no match is found, return the original URL
