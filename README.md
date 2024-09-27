@@ -17,8 +17,8 @@ This project is a web-based platform developed to assist in the Hurricane Otis c
 - JavaScript
 
 ## Links
-[Hurricane Otis People Finder](https://mtumalan.github.io/poracapulco/huracanotis/)
-[Hurricane John Extraction Report](https://mtumalan.github.io/poracapulco/huracanjohn/)
+- [Hurricane Otis People Finder](https://mtumalan.github.io/poracapulco/huracanotis/)
+- [Hurricane John Extraction Report](https://mtumalan.github.io/poracapulco/huracanjohn/)
 
 ## Contributors
 
