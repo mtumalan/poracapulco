@@ -1,0 +1,9 @@
+
+.update-status {
+  text-align: left;
+}
+
+.search-container {
+  display: "flex";
+  justify-content: "center";
+}
