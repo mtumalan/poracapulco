@@ -256,7 +256,7 @@ function cargarDatos() {
 
 // Función para transformar la URL de Google Drive
 function transformarURLGoogleDrive(url) {
-  var regex = /https:\/\/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/;
+  var regex = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\//;
   return url.replace(regex, "https://drive.google.com/uc?export=view&id=$1");
 }
 
