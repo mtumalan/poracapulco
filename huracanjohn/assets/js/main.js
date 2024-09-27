@@ -121,7 +121,7 @@ function renderLista() {
     for (var index = 0; index < personas.length; index++) {
       const item = personas[index];
 
-      console.log("item: ", index, ": ", item)
+      //console.log("item: ", index, ": ", item)
 
       var colonia = (item["Colonia"] || "").trim();
       var direccionLugar = (item["Dirección del lugar"] || "").trim();
@@ -148,7 +148,7 @@ function renderLista() {
       // Transform the Google Drive URL if needed
       if (foto && foto.includes("drive.google.com/open?id=")) {
         foto = transformarURLGoogleDrive(foto);
-        console.log(foto);
+        //console.log(foto);
       }
 
       var image = document.createElement("img");
@@ -180,7 +180,7 @@ function renderLista() {
 
       // Grid for additional information
       var grid = document.createElement("div");
-      grid.classList.add("grid", "grid-cols-5", "my-3", "mx-2"); // Tailwind grid
+      grid.classList.add("grid", "grid-cols-2", "my-3", "mx-2"); // Tailwind grid
       cardBody.appendChild(grid);
 
       if(parseInt(adultosMayores) !== 0) {
@@ -261,18 +261,15 @@ function cargarDatos() {
 
 // Función para transformar la URL de Google Drive
 function transformarURLGoogleDrive(url) {
-  // Match either 'open?id=' or 'file/d/'
-  var regexOpen = /https:\/\/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/;
-  var regexFile = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\//;
-  
-  // Check if the URL matches the 'open?id=' format
-  if (regexOpen.test(url)) {
-    return url.replace(regexOpen, "https://drive.google.com/file/d/$1/preview");
-  }
-  
-  // Check if the URL matches the 'file/d/' format
-  if (regexFile.test(url)) {
-    return url.replace(regexFile, "https://drive.google.com/file/d/$1/preview");
+  // Match both 'open?id=' or 'file/d/' formats in the same regex
+  var regex = /https:\/\/drive\.google\.com\/(?:open\?id=|file\/d\/)([a-zA-Z0-9_-]+)/;
+
+  // Check if the URL matches either of the formats
+  var match = url.match(regex);
+
+  // If a match is found, return the transformed thumbnail URL with size
+  if (match) {
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
   }
 
   // If no match is found, return the original URL
