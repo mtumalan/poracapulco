@@ -1,4 +1,4 @@
-# Hurricane Otis Crisis Response Platform
+# Hurricane Crisis Response Platform
 
 ## Overview
 
@@ -16,7 +16,13 @@ This project is a web-based platform developed to assist in the Hurricane Otis c
 - CSS
 - JavaScript
 
-## Acknowledgments
+## Links
+[Hurricane Otis People Finder](https://mtumalan.github.io/poracapulco/huracanotis/)
+[Hurricane John Extraction Report](https://mtumalan.github.io/poracapulco/huracanotis/)
 
-- Special thanks to Luis Abarca for important contributions to this project.
+## Contributors
 
+- Mauricio Tumalan
+- Luis Abarca
+- Santiago Benitez
+- David Flores 
