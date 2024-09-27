@@ -125,18 +125,17 @@ function renderLista() {
 
       var colonia = (item["Colonia"] || "").trim();
       var direccionLugar = (item["Dirección del lugar"] || "").trim();
-      var edad = (item["Edad"] || "").trim();
-      var sexo = (item["Sexo"] || "").trim();
-      var rasgos = (item["Rasgos distintivos"] || "").trim();
-      var zona = (item["Zona"] || "").trim();
-      var ultima = (item["Última ubicación conocida"] || "").trim();
-      var estado = (item["Estado de la persona"] || "").trim();
-      var foto = (item["Fotografía"] || "").trim();
-      var numero = (item["Número de teléfono de contacto"] || "").trim();
+      var totalAevacuar = (item["Número de personas en total a evacuar"] || "").trim();
+      var adultosMayores = (item["¿Cuántas personas de la tercera edad se encuentran?"] || "").trim();
+      var adultos = (item["¿Cuántas personas adultas se encuentran?"] || "").trim();
+      var ninos = (item["¿Cuántos niños y bebés se encuentran?"] || "").trim();
+      var discapacitados = (item["¿Cuántas personas con discapacidad se encuentran?"] || "").trim();
+      var embarazadas = (item["¿Cuántas personas embarazadas se encuentran?"] || "").trim();
+      var foto = (item["Fotografía del lugar"] || "").trim();
 
       // Remplaza caracteres especiales.
       var slug = createSlug(direccionLugar, "-");
-      var zonaSlug = createSlug(zona, "-");
+      var zonaSlug = createSlug(direccionLugar, "-");
 
       // Agrega slugs
       item.slug = slug;
@@ -161,60 +160,61 @@ function renderLista() {
       cardBody.classList.add("p-4"); // Tailwind padding for card body
       card.appendChild(cardBody);
 
-      var colonia = document.createElement("h3");
-      colonia.innerHTML = "<strong>Colonia:</strong> " + colonia;
+      var coloniaElement = document.createElement("h3");
+      coloniaElement.innerHTML = "<strong>Colonia:</strong> " + colonia;
 
-      colonia.classList.add("py-2", "text-xl", "font-semibold"); // Tailwind for typography
-      cardBody.appendChild(colonia);
+      coloniaElement.classList.add("py-2", "text-xl", "font-semibold"); // Tailwind for typography
+      cardBody.appendChild(coloniaElement);
 
-      var direccion = document.createElement("h4");
-      direccion.innerHTML = "<strong>Dirección: </strong> " + direccionLugar;
+      var direccionElement = document.createElement("h4");
+      direccionElement.innerHTML = "<strong>Dirección: </strong> " + direccionLugar;
 
-      direccion.classList.add("py-2", "text-xl", "font-semibold"); // Tailwind for typography
-      cardBody.appendChild(direccion);
+      direccionElement.classList.add("py-2", "text-xl", "font-semibold"); // Tailwind for typography
+      cardBody.appendChild(direccionElement);
+      
+      var totalEvacuarElement = document.createElement("h4");
+      totalEvacuarElement.innerHTML = "<strong>Total de Personas a Evacuar: </strong> " + totalAevacuar;
 
+      totalEvacuarElement.classList.add("py-2", "text-xl", "font-semibold"); // Tailwind for typography
+      cardBody.appendChild(totalEvacuarElement);
+
+      // Grid for additional information
       var grid = document.createElement("div");
-      grid.classList.add("grid", "grid-cols-3", "my-3"); // Tailwind grid
+      grid.classList.add("grid", "grid-cols-5", "my-3", "mx-2"); // Tailwind grid
       cardBody.appendChild(grid);
 
-      var edadElement = document.createElement("p");
-      edadElement.innerHTML = "<strong>Edad:</strong> <br>" + edad;
-      grid.appendChild(edadElement);
-
-      var sexoElement = document.createElement("p");
-      sexoElement.innerHTML = "<strong>Sexo:</strong> <br>" + sexo;
-      grid.appendChild(sexoElement);
-
-      var zonaElement = document.createElement("p");
-      zonaElement.innerHTML = "<strong>Zona:</strong><br> " + zona;
-      grid.appendChild(zonaElement);
-
-      if (rasgos) {
-        var rasgosElement = document.createElement("p");
-        rasgosElement.classList.add("my-2"); // Tailwind margin class
-        rasgosElement.innerHTML =
-          "<strong>Rasgos distintivos:</strong><br> " + rasgos;
-        cardBody.appendChild(rasgosElement);
+      if(parseInt(adultosMayores) !== 0) {
+        var adultosMayoresElement = document.createElement("p");
+        adultosMayoresElement.innerHTML = "<strong>Adultos Mayores: </strong>" + adultosMayores;
+        grid.appendChild(adultosMayoresElement); 
       }
 
-      if (ultima) {
-        var ultimaElement = document.createElement("p");
-        ultimaElement.classList.add("my-2"); // Tailwind margin class
-        ultimaElement.innerHTML =
-          "<strong>Última ubicación conocida:</strong><br> " + ultima;
-        cardBody.appendChild(ultimaElement);
+      if(parseInt(adultos) !== 0) {
+        var adultosElement = document.createElement("p");
+        adultosElement.innerHTML = "<strong>Adultos: </strong>" + adultos;
+        grid.appendChild(adultosElement); 
       }
+      
+      if(parseInt(ninos) !== 0) {
 
-      var estadoElement = document.createElement("p");
-      estadoElement.classList.add("my-2"); // Tailwind margin class
-      estadoElement.innerHTML = "<strong>Estado:</strong><br> " + estado;
-      cardBody.appendChild(estadoElement);
+        var ninosElement = document.createElement("p");
+        ninosElement.innerHTML = "<strong>Niños: </strong>" + ninos;
+        grid.appendChild(ninosElement); 
+      }
+      
+      if(parseInt(discapacitados) !== 0) {
 
-      var numeroElement = document.createElement("p");
-      numeroElement.innerHTML =
-        "<strong>En caso de localizar, contactar al número:</strong><br> " +
-        numero;
-      cardBody.appendChild(numeroElement);
+        var discapacitadosElement = document.createElement("p");
+        discapacitadosElement.innerHTML = "<strong>Discapacitados: </strong>" + discapacitados;
+        grid.appendChild(discapacitadosElement); 
+      }
+      
+      if(parseInt(embarazadas) !== 0) {
+
+        var embarazadasElement = document.createElement("p");
+        embarazadasElement.innerHTML = "<strong>Embarazadas: </strong>" + embarazadas;
+        grid.appendChild(embarazadasElement); 
+      }
 
       filteredList.appendChild(card);
     }
@@ -259,16 +259,20 @@ function cargarDatos() {
     });
 }
 
+// Función para transformar la URL de Google Drive
 function transformarURLGoogleDrive(url) {
-  // Match both 'open?id=' or 'file/d/' formats in the same regex
-  var regex = /https:\/\/drive\.google\.com\/(?:open\?id=|file\/d\/)([a-zA-Z0-9_-]+)/;
-
-  // Check if the URL matches either of the formats
-  var match = url.match(regex);
-
-  // If a match is found, return the transformed thumbnail URL with size
-  if (match) {
-    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
+  // Match either 'open?id=' or 'file/d/'
+  var regexOpen = /https:\/\/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/;
+  var regexFile = /https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)\//;
+  
+  // Check if the URL matches the 'open?id=' format
+  if (regexOpen.test(url)) {
+    return url.replace(regexOpen, "https://drive.google.com/file/d/$1/preview");
+  }
+  
+  // Check if the URL matches the 'file/d/' format
+  if (regexFile.test(url)) {
+    return url.replace(regexFile, "https://drive.google.com/file/d/$1/preview");
   }
 
   // If no match is found, return the original URL
