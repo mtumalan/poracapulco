@@ -121,7 +121,7 @@ function renderLista() {
     for (var index = 0; index < personas.length; index++) {
       const item = personas[index];
 
-      console.log("item: ", index, ": ", item)
+      //console.log("item: ", index, ": ", item)
 
       var colonia = (item["Colonia"] || "").trim();
       var direccionLugar = (item["Dirección del lugar"] || "").trim();
@@ -148,7 +148,7 @@ function renderLista() {
       // Transform the Google Drive URL if needed
       if (foto && foto.includes("drive.google.com/open?id=")) {
         foto = transformarURLGoogleDrive(foto);
-        console.log(foto);
+        //console.log(foto);
       }
 
       var image = document.createElement("img");
@@ -180,7 +180,7 @@ function renderLista() {
 
       // Grid for additional information
       var grid = document.createElement("div");
-      grid.classList.add("grid", "grid-cols-5", "my-3", "mx-2"); // Tailwind grid
+      grid.classList.add("grid", "grid-cols-2", "my-3", "mx-2"); // Tailwind grid
       cardBody.appendChild(grid);
 
       if(parseInt(adultosMayores) !== 0) {
