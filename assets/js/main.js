@@ -114,7 +114,7 @@ function onFormSubmit(e) {
 }
 
 function renderLista() {
-  // orden cronológico inverso.
+  // Orden cronológico inverso.
   personas = personas.reverse();
 
   if (personas && personas.length > 0) {
@@ -141,11 +141,7 @@ function renderLista() {
       item.zonaSlug = zonaSlug;
 
       var card = document.createElement("div");
-      card.className =
-        slug +
-        " " +
-        zonaSlug +
-        "card bg-white border-2 border-gray-200 rounded-lg shadow-sm hover:shadow-md flex flex-col";
+      card.className = `${slug} ${zonaSlug} card bg-white border-2 border-gray-200 rounded-lg shadow-sm hover:shadow-md flex flex-col`; // Tailwind card styling
 
       // Transform the Google Drive URL if needed
       if (foto && foto.includes("drive.google.com/open?id=")) {
@@ -153,25 +149,23 @@ function renderLista() {
         console.log(foto);
       }
 
-      var iframe = document.createElement("iframe");
-      iframe.src = foto ? foto : "";
-      iframe.classList =
-        "w-full aspect-square object-contain h-auto" +
-        (foto ? "" : " hidden md:block"); // Oculta iframe en mobile si no hay foto
-      iframe.allow = "fullscreen"; // Allow fullscreen if needed
-      card.appendChild(iframe);
+      var image = document.createElement("img");
+      image.src = foto ? foto : "avatar.png";
+      image.classList =
+      image.classList = "w-full aspect-square object-contain h-auto";
+      card.appendChild(image);
 
       var cardBody = document.createElement("div");
-      cardBody.classList = "p-4";
+      cardBody.classList.add("p-4"); // Tailwind padding for card body
       card.appendChild(cardBody);
 
       var nombreElement = document.createElement("h3");
       nombreElement.innerHTML = nombre;
-      nombreElement.classList = "py-2 text-xl font-semibold";
+      nombreElement.classList.add("py-2", "text-xl", "font-semibold"); // Tailwind for typography
       cardBody.appendChild(nombreElement);
 
       var grid = document.createElement("div");
-      grid.classList = "grid grid-cols-3 my-3";
+      grid.classList.add("grid", "grid-cols-3", "my-3"); // Tailwind grid
       cardBody.appendChild(grid);
 
       var edadElement = document.createElement("p");
@@ -188,7 +182,7 @@ function renderLista() {
 
       if (rasgos) {
         var rasgosElement = document.createElement("p");
-        rasgosElement.classList = "my-2";
+        rasgosElement.classList.add("my-2"); // Tailwind margin class
         rasgosElement.innerHTML =
           "<strong>Rasgos distintivos:</strong><br> " + rasgos;
         cardBody.appendChild(rasgosElement);
@@ -196,14 +190,14 @@ function renderLista() {
 
       if (ultima) {
         var ultimaElement = document.createElement("p");
-        ultimaElement.classList = "my-2";
+        ultimaElement.classList.add("my-2"); // Tailwind margin class
         ultimaElement.innerHTML =
           "<strong>Última ubicación conocida:</strong><br> " + ultima;
         cardBody.appendChild(ultimaElement);
       }
 
       var estadoElement = document.createElement("p");
-      estadoElement.classList = "my-2";
+      estadoElement.classList.add("my-2"); // Tailwind margin class
       estadoElement.innerHTML = "<strong>Estado:</strong><br> " + estado;
       cardBody.appendChild(estadoElement);
 
