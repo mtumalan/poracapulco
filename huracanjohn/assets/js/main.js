@@ -11,11 +11,11 @@ var dataList,
   errorMessage;
 
 var csvFileURL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRRo-QOJ6L0_YLK8A5ThIugf6c1AcZE-MGgd_hLuWgRhQKf1HauB3MOEkkfKa7xBMKQwbNGJ9KMWZoI/pub?output=csv";
+  "https://docs.google.com/spreadsheets/d/1hnKEHMQlqfKKJDhC7e2A91sNhozkb_rgd2fs0atjQKk/pub?gid=980204347&single=true&output=csv";
 
 function abreNuevoReporte() {
   window.open(
-    "https://docs.google.com/forms/d/e/1FAIpQLSfqtoS1DvwwcNj56MevuQl002A8lKWvwGci-t7OceWkfydtMA/viewform",
+    "https://forms.gle/PC7Bf9hK5PPQzM7G7",
     "_blank"
   );
 }
