@@ -8,8 +8,8 @@ This project is a web-based platform developed to assist in the Hurricane Otis c
 
 - **Data Gathering:** Seamlessly collects data from Google Forms to gather information about missing relatives.
 - **Report Processing:** Over 700 reports have been successfully processed and shared with brigade authorities.
- - 241 Reports at Hurricane Otis Crisis
- - 500+ Reports at Hurricane John Crisis 
+ -- 241 Reports at Hurricane Otis Crisis
+ -- 500+ Reports at Hurricane John Crisis 
 - **Filtering Options:** The platform includes filtering options to streamline search and rescue efforts, contributing to the efficiency of the response team.
 
 ## Technologies Used
