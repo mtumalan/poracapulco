@@ -7,7 +7,7 @@ var dataList,
   filtroCampo,
   filtroEntrada,
   filtrarButton,
-  filtroZona,
+  filtroColonia,
   errorMessage;
 
 var csvFileURL =
@@ -23,14 +23,53 @@ function abreNuevoReporte() {
 function createSlug(value, separator) {
   return value
     .toLowerCase()
-    .replace("á", "a")
-    .replace("é", "e")
-    .replace("í", "i")
-    .replace("ó", "o")
-    .replace("ú", "u")
-    .replace("ñ", "n")
-    .replace(/\W/g, separator || " ");
+    .replace(/[áàâä]/g, "a")
+    .replace(/[éèêë]/g, "e")
+    .replace(/[íìîï]/g, "i")
+    .replace(/[óòôö]/g, "o")
+    .replace(/[úùûü]/g, "u")
+    .replace(/ñ/g, "n")
+    .replace(/\W+/g, separator || "-")  // Reemplaza cualquier carácter no alfanumérico por el separador
+    .trim();  // Asegúrate de quitar espacios innecesarios
 }
+
+function normalizeString(str) {
+  return str
+    .trim()
+    .toUpperCase()
+    .replace(/[ÁÀÂÄ]/g, 'A')
+    .replace(/[ÉÈÊË]/g, 'E')
+    .replace(/[ÍÌÎÏ]/g, 'I')
+    .replace(/[ÓÒÔÖ]/g, 'O')
+    .replace(/[ÚÙÛÜ]/g, 'U')
+    .replace(/Ñ/g, 'N')
+    .replace(/[^A-Z0-9]+/g, ' '); // Reemplaza caracteres no alfanuméricos por un espacio
+}
+
+function normalizeColonias(personas) {
+  const colonias = personas.map(persona => {
+    // Normaliza la colonia quitando caracteres no deseados, poniendo en mayúsculas y quitando espacios
+    return normalizeString(persona["Colonia"] || "").trim();
+  });
+
+  // Crea un set con valores únicos para evitar duplicados
+  const uniqueColonias = [...new Set(colonias)];
+
+  // Devuelve las colonias ordenadas alfabéticamente
+  return uniqueColonias.sort((a, b) => a.localeCompare(b));
+}
+
+function renderDropdownColonias(colonias) {
+  const dropdown = document.getElementById('filtro-colonia');
+  dropdown.innerHTML = '<option value="">Seleccionar Colonia</option>'; // Clear existing options
+  colonias.forEach(colonia => {
+    const option = document.createElement('option');
+    option.value = colonia;
+    option.textContent = colonia;
+    dropdown.appendChild(option);
+  });
+}
+
 
 function resetResultList() {
   var elements = document.querySelectorAll(".card");
@@ -48,7 +87,7 @@ function filtrarLista(filtro) {
   resetResultList();
 
   var esPorNombre = filtroCampo.value === "nombre";
-  var esPorZona = filtroCampo.value === "zona";
+  var esPorColonia = filtroCampo.value === "colonia";
 
   if (!filtro || filtro.length < 1) return;
 
@@ -74,12 +113,12 @@ function filtrarLista(filtro) {
         filtered.push(persona);
       }
     }
-  } else if (esPorZona) {
-    var zone = createSlug(filtro.trim(), "-");
+  } else if (esPorColonia) {
+    var zone = normalizeString(filtro.trim(), "-");
 
     for (var i = 0; i < personas.length; i++) {
       var persona = personas[i];
-      var match = persona.zonaSlug.match(zone);
+      var match = persona.coloniaSlug.match(zone);
 
       // Oculta los no encontrados
       if (!!match) {
@@ -102,7 +141,7 @@ function filtrarLista(filtro) {
 
 function handleFiltrarLista() {
   var filtro =
-    filtroCampo.value === "nombre" ? filtroEntrada.value : filtroZona.value;
+    filtroCampo.value === "nombre" ? filtroEntrada.value : filtroColonia.value;
 
   filtrarLista(filtro.trim());
 }
@@ -135,15 +174,15 @@ function renderLista() {
 
       // Remplaza caracteres especiales.
       var slug = createSlug(direccionLugar, "-");
-      var zonaSlug = createSlug(direccionLugar, "-");
+      var coloniaSlug = createSlug(direccionLugar, "-");
 
       // Agrega slugs
       item.slug = slug;
       item.cleanName = createSlug(direccionLugar, " ");
-      item.zonaSlug = zonaSlug;
+      item.coloniaSlug = coloniaSlug;
 
       var card = document.createElement("div");
-      card.className = `${slug} ${zonaSlug} card bg-white border-2 border-gray-200 rounded-lg shadow-sm hover:shadow-md flex flex-col`; // Tailwind card styling
+      card.className = `${slug} ${coloniaSlug} card bg-white border-2 border-gray-200 rounded-lg shadow-sm hover:shadow-md flex flex-col`; // Tailwind card styling
 
       // Transform the Google Drive URL if needed
       if (foto && foto.includes("drive.google.com/open?id=")) {
@@ -223,15 +262,15 @@ function renderLista() {
 
 // Detect changes in the filtering method
 function alCambiarTipo() {
-  if (filtroCampo.value === "zona") {
-    // If Zona is selected, show the Zona selector
-    filtroZona.style.display = "block";
+  if (filtroCampo.value === "colonia") {
+    // If Colonia is selected, show the Colonia selector
+    filtroColonia.style.display = "block";
     filtroEntrada.style.display = "none";
     filtroEntrada.value = "";
-    var filtro = filtroZona.value;
+    var filtro = filtroColonia.value;
   } else {
-    // Otherwise, hide the Zona selector
-    filtroZona.style.display = "none";
+    // Otherwise, hide the Colonia selector
+    filtroColonia.style.display = "none";
     filtroEntrada.style.display = "block";
     filtroEntrada.value = "";
     var filtro = filtroEntrada.value;
@@ -239,6 +278,8 @@ function alCambiarTipo() {
 
   filtrarLista(filtro);
 }
+
+
 
 function cargarDatos() {
   fetch(csvFileURL)
@@ -254,7 +295,11 @@ function cargarDatos() {
 
           // Mostrar todos los datos al cargar la página
           renderLista();
-        },
+
+          // Normaliza las colonias
+          const colonias = normalizeColonias(personas);
+          renderDropdownColonias(colonias);
+        },  
       });
     });
 }
@@ -288,7 +333,7 @@ window.addEventListener("load", function () {
   filtroCampo = document.getElementById("filtro-campo");
   filtroEntrada = document.getElementById("filtro-entrada");
   filtrarButton = document.getElementById("filtrar-button");
-  filtroZona = document.getElementById("filtro-zona");
+  filtroColonia = document.getElementById("filtro-colonia");
   errorMessage = document.querySelector("#results-error");
 
   document.querySelector("#buscador").addEventListener("submit", onFormSubmit);
