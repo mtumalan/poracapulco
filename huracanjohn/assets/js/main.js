@@ -121,7 +121,7 @@ function renderLista() {
     for (var index = 0; index < personas.length; index++) {
       const item = personas[index];
 
-      //console.log("item: ", index, ": ", item)
+      // console.log("item: ", index, ": ", item)
 
       var colonia = (item["Colonia"] || "").trim();
       var direccionLugar = (item["Dirección del lugar"] || "").trim();
@@ -132,6 +132,8 @@ function renderLista() {
       var discapacitados = (item["¿Cuántas personas con discapacidad se encuentran?"] || "").trim();
       var embarazadas = (item["¿Cuántas personas embarazadas se encuentran?"] || "").trim();
       var foto = (item["Fotografía del lugar"] || "").trim();
+      var nombrePublicador = (item["Nombre persona que genera el reporte"] || "").trim();
+      var numeroPublicador = (item["Número de teléfono de contacto"] || "").trim();
 
       // Remplaza caracteres especiales.
       var slug = createSlug(direccionLugar, "-");
@@ -173,7 +175,7 @@ function renderLista() {
       cardBody.appendChild(direccionElement);
       
       var totalEvacuarElement = document.createElement("h4");
-      totalEvacuarElement.innerHTML = "<strong>Total de Personas a Evacuar: </strong> " + totalAevacuar;
+      totalEvacuarElement.innerHTML = "<strong>Total de Personas a Evacuar: </strong> " +  totalAevacuar;
 
       totalEvacuarElement.classList.add("py-2", "text-xl", "font-semibold"); // Tailwind for typography
       cardBody.appendChild(totalEvacuarElement);
@@ -215,6 +217,20 @@ function renderLista() {
         embarazadasElement.innerHTML = "<strong>Embarazadas: </strong>" + embarazadas;
         grid.appendChild(embarazadasElement); 
       }
+
+      // Sección de información del publicador
+      var publicadorSection = document.createElement("div");
+      publicadorSection.classList.add("mt-4", "p-2", "bg-gray-100", "rounded-lg"); // Estilos Tailwind para la sección
+
+      var nombreElement = document.createElement("p");
+      nombreElement.innerHTML = "<strong>Autor: </strong>" + nombrePublicador;
+      publicadorSection.appendChild(nombreElement);
+
+      var numeroElement = document.createElement("p");
+      numeroElement.innerHTML = "<strong>Contacto: </strong>" + numeroPublicador;
+      publicadorSection.appendChild(numeroElement);
+
+      cardBody.appendChild(publicadorSection);
 
       filteredList.appendChild(card);
     }
