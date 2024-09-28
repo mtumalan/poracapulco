@@ -46,6 +46,42 @@ function normalizeString(str) {
     .replace(/[^A-Z0-9]+/g, ' '); // Reemplaza caracteres no alfanuméricos por un espacio
 }
 
+// Levenshtein Distance function
+function getLevenshteinDistance(a, b) {
+  const matrix = Array(a.length + 1).fill(null).map(() =>
+    Array(b.length + 1).fill(null)
+  );
+
+  for (let i = 0; i <= a.length; i += 1) {
+    matrix[i][0] = i;
+  }
+
+  for (let j = 0; j <= b.length; j += 1) {
+    matrix[0][j] = j;
+  }
+
+  for (let i = 1; i <= a.length; i += 1) {
+    for (let j = 1; j <= b.length; j += 1) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      matrix[i][j] = Math.min(
+        matrix[i - 1][j] + 1, // deletion
+        matrix[i][j - 1] + 1, // insertion
+        matrix[i - 1][j - 1] + cost // substitution
+      );
+    }
+  }
+
+  return matrix[a.length][b.length];
+}
+
+// Function to calculate similarity percentage
+function calculateSimilarity(a, b) {
+  const maxLength = Math.max(a.length, b.length);
+  if (maxLength === 0) return 1; // If both strings are empty, consider them 100% similar
+  const distance = getLevenshteinDistance(a, b);
+  return 1 - (distance / maxLength); // Similarity as a percentage (0-1)
+}
+
 function normalizeColonias(personas) {
   const colonias = personas.map(persona => {
     // Normaliza la colonia quitando caracteres no deseados, poniendo en mayúsculas y quitando espacios
@@ -61,7 +97,11 @@ function normalizeColonias(personas) {
 
 function renderDropdownColonias(colonias) {
   const dropdown = document.getElementById('filtro-colonia');
-  dropdown.innerHTML = '<option value="">Seleccionar Colonia</option>'; // Clear existing options
+
+  // Add the Tailwind CSS width class to the select element
+  dropdown.classList.add("w-64");
+
+  // Populate the dropdown with options
   colonias.forEach(colonia => {
     const option = document.createElement('option');
     option.value = colonia;
@@ -69,6 +109,7 @@ function renderDropdownColonias(colonias) {
     dropdown.appendChild(option);
   });
 }
+
 
 
 function resetResultList() {
@@ -114,19 +155,25 @@ function filtrarLista(filtro) {
       }
     }
   } else if (esPorColonia) {
-    var zone = normalizeString(filtro.trim(), "-");
-
+    // Normalize the filter input
+    var zone = normalizeString(filtro.trim());
+  
     for (var i = 0; i < personas.length; i++) {
       var persona = personas[i];
-      var match = persona.coloniaSlug.match(zone);
-
-      // Oculta los no encontrados
-      if (!!match) {
+  
+      // Normalize the coloniaSlug of the persona
+      var normalizedColoniaSlug = normalizeString(persona.coloniaSlug);
+  
+      // Calculate the similarity between the normalized filter (zone) and the normalizedColoniaSlug
+      var similarity = calculateSimilarity(normalizedColoniaSlug, zone);
+  
+      // Set threshold for similarity (e.g., 40%)
+      if (similarity >= 0.4) {
         filtered.push(persona);
+        console.log("filtered: ", filtered);
       } else {
-        // Oculta la tarjeta de la persona sin match
         document
-          .querySelectorAll("." + persona.slug)
+          .querySelectorAll("." + CSS.escape(persona.slug))
           .forEach((item) => item.classList.add("hidden"));
       }
     }
