@@ -1,91 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reportes de Rescate en Acapulco</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-    <link rel="stylesheet" href="./assets/styles/global.css?v=20231102" />
-  </head>
-  <body class="bg-slate-50">
-    <div class="fixed top-0 left-0 w-full bg-white p-4 z-10 flex justify-center" style="display: none;">
-      <button class="bg-black text-white rounded-md py-2 px-4 mr-2" onclick="window.location.href='index.html'">Reportes</button>
-      <button class="bg-black text-white rounded-md py-2 px-4 mr-2" onclick="window.location.href='info.html'">Información Relevante</button>
-    </div>
-    <main class="lg:container mx-auto">
-      <div id="data-list"></div>
-      <form id="buscador"></form>
-        <div class="flex flex-col mx-4 gap-2 lg:flex-row lg:mx-auto my-8 self-center justify-center" style="display: none;">
-          <div class="flex flex-col gap-2 w-full lg:flex-row lg:w-2/4 mt-14">
-            <select id="filtro-campo">
-              <option value="nombre">Nombre de persona</option>
-              <option value="zona">Zona</option>
-            </select>
-            <select id="filtro-zona">
-              <option value="">Seleccionar Zona</option>
-              <option value="Alta Progreso">Alta Progreso</option>
-              <option value="Barra Vieja">Barra Vieja</option>
-              <option value="Bocamar">Bocamar</option>
-              <option value="Caleta">Caleta</option>
-              <option value="Caletilla">Caletilla</option>
-              <option value="Centro">Centro</option>
-              <option value="Colosio">Colosio</option>
-              <option value="Coloso">Coloso</option>
-              <option value="Condesa">Condesa</option>
-              <option value="Costa Azul, Icacos">Costa Azul, Icacos</option>
-              <option value="Cruces / Cima">Cruces / Cima</option>
-              <option value="Cumbres de Figueroa">Cumbres de Figueroa</option>
-              <option value="Diamante">Diamante</option>
-              <option value="Foviste Alta Progreso">Foviste Alta Progreso</option>
-              <option value="Ejido">Ejido</option>
-              <option value="El Cayaco / Papagayo">El Cayaco / Papagayo</option>
-              <option value="El Roble">El Roble</option>
-              <option value="Emiliano Zapata / El Quemado">Emiliano Zapata / El Quemado</option>
-              <option value="Farallón">Farallón</option>
-              <option value="Hogar Moderno">Hogar Moderno</option>
-              <option value="Hornos Insurgentes">Hornos Insurgentes</option>
-              <option value="Hospital - La Laja">Hospital - La Laja</option>
-              <option value="Jardín y Pie de la Cuesta">Jardín y Pie de la Cuesta</option>
-              <option value="Joyas, Brisas, Escénica">Joyas, Brisas, Escénica</option>
-              <option value="KM 21, KM 30 y alrededores">KM 21, KM 30 y alrededores</option>
-              <option value="Miguel Alemán">Miguel Alemán</option>
-              <option value="Morelos">Morelos</option>
-              <option value="La Garita">La Garita</option>
-              <option value="La Navidad Acapulco">La Navidad Acapulco</option>
-              <option value="Las Cruces / Rancho">Las Cruces / Rancho</option>
-              <option value="Lerdo de Tejada">Lerdo de Tejada</option>
-              <option value="Libertadores">Libertadores</option>
-              <option value="Llano Largo">Llano Largo</option>
-              <option value="Mozimba">Mozimba</option>
-              <option value="Palma Sola">Palma Sola</option>
-              <option value="Palomares y Potrerillo">Palomares y Potrerillo</option>
-              <option value="Progreso">Progreso</option>
-              <option value="Puerto Marqués">Puerto Marqués</option>
-              <option value="Renacimiento">Renacimiento</option>
-              <option value="Revolcadero / La Poza">Revolcadero / La Poza</option>
-              <option value="Zapata / Libertadores / Vacacional">Zapata / Libertadores / Vacacional</option>
-              <option value="Zona Hornitos - Hornos">Zona Hornitos - Hornos</option>
-              <option value="Sabana">Sabana</option>
-              <option value="Icacos">Icacos</option>
-            </select>
-            <input
-              type="search"
-              id="filtro-entrada"
-              class="w-200"
-              placeholder="Filtrar por nombre"
-              value=""
-            />
-            <button id="filtrar-button" class="bg-black text-white rounded-md py-4 px-8">Filtrar</button>
-            <button id="reporte" class="bg-black text-white mt-8 lg:mt-0 rounded-md py-4 px-8">Crear Reporte</button>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Busca personas en Acapulco</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link rel="stylesheet" href="./assets/styles/global.css?v=20231102" />
+</head>
+
+<body class="bg-slate-50">
+  <div class="fixed top-0 left-0 w-full bg-white p-4 z-10 flex justify-center">
+    <button class="bg-black text-white rounded-md py-2 px-4 mr-2"
+      onclick="window.location.href='index.html'">Reportes</button>
+    <button class="bg-black text-white rounded-md py-2 px-4 mr-2" onclick="window.location.href='info.html'">Información
+      Relevante</button>
+  </div>
+  <main class="lg:container mx-auto">
+    <div id="data-list"></div>
+
+    <form id="buscador">
+      <div class="flex flex-col mx-4 gap-2 lg:flex-row lg:mx-auto my-8 self-center justify-center">
+        <div class="flex flex-col gap-2 w-full lg:flex-row lg:w-2/4 mt-14">
+          <select id="filtro-campo">
+            <option value="nombre">Nombre de persona</option>
+            <option value="colonia">Colonia</option>
+          </select>
+          <select id="filtro-colonia" style="display: none">
+            <option value="">Seleccionar Colonia</option>
+          </select>
+          <input type="search" id="filtro-entrada" class="w-200" placeholder="Filtrar por nombre" value="" />
+          <button type="button" id="filtrar-button" class="bg-black text-white rounded-md py-4 px-8">Filtrar</button>
+          <button id="reporte" class="bg-black text-white mt-8 lg:mt-0 rounded-md py-4 px-8">Crear Reporte</button>
         </div>
-      </form>
-      <div id="results-error" class="text-center py-8 text-3xl border-2 border-gray-200 m-4 hidden">No se encontraron resultados</div>
-      <div id="filtered-list" class="grid grid-col-1 sm:grid-col-2 md:grid-col-3 lg:grid-cols-4 gap-2 mx-4"></div>
+      </div>
 
-    </main>
+    </form>
+    <div id="results-error" class="text-center py-8 text-3xl border-2 border-gray-200 m-4 hidden">No se encontraron
+      resultados</div>
+    <div id="filtered-list" class="grid grid-col-1 sm:grid-col-2 md:grid-col-3 lg:grid-cols-4 gap-2 mx-4"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="./assets/js/main.js?v=20231102"></script>
-  </body>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="./assets/js/main.js?v=20231102"></script>
+</body>
+
 </html>
