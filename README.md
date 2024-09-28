@@ -28,3 +28,4 @@ This project is a web-based platform developed to assist in the Hurricane Otis c
 - Luis Abarca
 - Santiago Benitez
 - David Flores 
+- Miguel Fernández
