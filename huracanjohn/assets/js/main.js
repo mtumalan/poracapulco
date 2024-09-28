@@ -144,11 +144,13 @@ function filtrarLista(filtro) {
 
     for (var i = 0; i < personas.length; i++) {
       var persona = personas[i];
+      var nombrePublicador = persona["Nombre persona que genera el reporte"] || "";
+      var cleanPublicadorName = createSlug(nombrePublicador, " ");
 
-      // Oculta los no encontrados
-      if (!persona.cleanName.match(regex)) {
+      // Filtra por el nombre del publicador
+      if (!cleanPublicadorName.match(regex)) {
         document
-          .querySelectorAll("." + persona.slug)
+          .querySelectorAll("." + CSS.escape(persona.slug))
           .forEach((item) => item.classList.add("hidden"));
       } else {
         filtered.push(persona);
@@ -170,7 +172,7 @@ function filtrarLista(filtro) {
       // Set threshold for similarity (e.g., 40%)
       if (similarity >= 0.4) {
         filtered.push(persona);
-        console.log("filtered: ", filtered);
+        //console.log("filtered: ", filtered);
       } else {
         document
           .querySelectorAll("." + CSS.escape(persona.slug))
