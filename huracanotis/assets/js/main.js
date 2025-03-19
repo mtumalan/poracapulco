@@ -1,4 +1,5 @@
 // Hoisting vars.
+
 var personas = [];
 var filtered = [];
 
@@ -10,8 +11,7 @@ var dataList,
   filtroZona,
   errorMessage;
 
-var csvFileURL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRRo-QOJ6L0_YLK8A5ThIugf6c1AcZE-MGgd_hLuWgRhQKf1HauB3MOEkkfKa7xBMKQwbNGJ9KMWZoI/pub?output=csv";
+var csvFileURL = "https://script.google.com/macros/s/AKfycbxGw_lDWj-EYi9yMaybsPurff6VjVFlcVIfYiXYSx6qPSooW97ybMZ_hYpTM7m6hPiY/exec";
 
 function abreNuevoReporte() {
   window.open(
@@ -79,7 +79,7 @@ function filtrarLista(filtro) {
 
     for (var i = 0; i < personas.length; i++) {
       var persona = personas[i];
-      var match = persona.zonaSlug.match(zone);
+      var match = persona.zonaSlug === zone
 
       // Oculta los no encontrados
       if (!!match) {
@@ -114,7 +114,8 @@ function onFormSubmit(e) {
 }
 
 function renderLista() {
-  // Orden cronológico inverso.
+  // filteredList.innerHTML = ""; // Limpiamos la lista antes de renderizar
+
   personas = personas.reverse();
 
   if (personas && personas.length > 0) {
@@ -122,95 +123,89 @@ function renderLista() {
       const item = personas[index];
 
       var nombre = (item["Nombre persona desaparecida"] || "").trim();
-      var edad = (item["Edad"] || "").trim();
+      var edad = String(item["Edad"] || "").trim();
       var sexo = (item["Sexo"] || "").trim();
       var rasgos = (item["Rasgos distintivos"] || "").trim();
       var zona = (item["Zona"] || "").trim();
       var ultima = (item["Última ubicación conocida"] || "").trim();
       var estado = (item["Estado de la persona"] || "").trim();
       var foto = (item["Fotografía"] || "").trim();
-      var numero = (item["Número de teléfono de contacto"] || "").trim();
+      var numero = String(item["Número de teléfono de contacto"] || "").trim();
 
       // Remplaza caracteres especiales.
       var slug = createSlug(nombre, "-");
       var zonaSlug = createSlug(zona, "-");
 
-      // Agrega slugs
+      //Agrega slugs
       item.slug = slug;
       item.cleanName = createSlug(nombre, " ");
       item.zonaSlug = zonaSlug;
 
       var card = document.createElement("div");
-      card.className = `${slug} ${zonaSlug} card bg-white border-2 border-gray-200 rounded-lg shadow-sm hover:shadow-md flex flex-col`; // Tailwind card styling
+      card.className = `${slug} ${zonaSlug} card bg-white shadow-md rounded-xl p-4 flex flex-col items-center text-center w-full`;
 
       // Transform the Google Drive URL if needed
       if (foto && foto.includes("drive.google.com/open?id=")) {
         foto = transformarURLGoogleDrive(foto);
         console.log(foto);
-      }
+      } 
 
       var image = document.createElement("img");
       image.src = foto ? foto : "avatar.png";
-      image.classList =
-      image.classList = "w-full aspect-square object-contain h-auto";
+      image.classList = "w-24 h-24 rounded-full mb-3 object-cover";
       card.appendChild(image);
 
       var cardBody = document.createElement("div");
-      cardBody.classList.add("p-4"); // Tailwind padding for card body
+      cardBody.classList.add("flex", "flex-col", "items-center", "text-center", "w-full");
       card.appendChild(cardBody);
 
       var nombreElement = document.createElement("h3");
       nombreElement.innerHTML = nombre;
-      nombreElement.classList.add("py-2", "text-xl", "font-semibold"); // Tailwind for typography
+      nombreElement.classList.add("text-lg", "font-bold");
       cardBody.appendChild(nombreElement);
 
-      var grid = document.createElement("div");
-      grid.classList.add("grid", "grid-cols-3", "my-3"); // Tailwind grid
-      cardBody.appendChild(grid);
-
-      var edadElement = document.createElement("p");
-      edadElement.innerHTML = "<strong>Edad:</strong> <br>" + edad;
-      grid.appendChild(edadElement);
-
-      var sexoElement = document.createElement("p");
-      sexoElement.innerHTML = "<strong>Sexo:</strong> <br>" + sexo;
-      grid.appendChild(sexoElement);
+      var infoElement = document.createElement("p");
+      infoElement.innerHTML = `Edad: ${edad} años | Sexo: ${sexo}`;
+      infoElement.classList.add("text-gray-500", "text-sm");
+      cardBody.appendChild(infoElement);
 
       var zonaElement = document.createElement("p");
-      zonaElement.innerHTML = "<strong>Zona:</strong><br> " + zona;
-      grid.appendChild(zonaElement);
+      zonaElement.innerText = `Zona: ${zona}`;
+      zonaElement.classList.add("text-gray-500", "text-sm");
+      cardBody.appendChild(zonaElement);
+
+      var ultimaElement = document.createElement("p");
+      ultimaElement.innerText = `Última ubicación: ${ultima}`;
+      ultimaElement.classList.add("text-gray-700", "mt-2");
+      cardBody.appendChild(ultimaElement);
 
       if (rasgos) {
         var rasgosElement = document.createElement("p");
-        rasgosElement.classList.add("my-2"); // Tailwind margin class
-        rasgosElement.innerHTML =
-          "<strong>Rasgos distintivos:</strong><br> " + rasgos;
-        cardBody.appendChild(rasgosElement);
-      }
-
-      if (ultima) {
-        var ultimaElement = document.createElement("p");
-        ultimaElement.classList.add("my-2"); // Tailwind margin class
-        ultimaElement.innerHTML =
-          "<strong>Última ubicación conocida:</strong><br> " + ultima;
-        cardBody.appendChild(ultimaElement);
+        rasgosElement.innerText = `Rasgos distintivos: ${rasgos}`;
+        rasgosElement.classList.add("text-gray-700", "mt-2");
+        card.appendChild(rasgosElement);
       }
 
       var estadoElement = document.createElement("p");
-      estadoElement.classList.add("my-2"); // Tailwind margin class
-      estadoElement.innerHTML = "<strong>Estado:</strong><br> " + estado;
-      cardBody.appendChild(estadoElement);
+      estadoElement.innerText = `Estado: ${estado}`;
+      estadoElement.classList.add("text-red-500", "font-semibold", "mt-2");
+      card.appendChild(estadoElement);
 
       var numeroElement = document.createElement("p");
-      numeroElement.innerHTML =
-        "<strong>En caso de localizar, contactar al número:</strong><br> " +
-        numero;
-      cardBody.appendChild(numeroElement);
+      numeroElement.innerText = `Contacto: ${numero}`;
+      numeroElement.classList.add("text-sm", "text-gray-600", "mt-2");
+      card.appendChild(numeroElement);
 
       filteredList.appendChild(card);
     }
   }
 }
+
+// Llamamos a cargarDatos al cargar la página
+//i wonder where to put this hmmm
+window.addEventListener("load", function () {
+  cargarDatos();
+});
 
 // Detect changes in the filtering method
 function alCambiarTipo() {
@@ -233,25 +228,16 @@ function alCambiarTipo() {
 
 function cargarDatos() {
   fetch(csvFileURL)
-    .then(function (response) {
-      return response.text();
+    .then(response => response.json())
+    .then(data => {
+      console.log("Datos recibidos:", data); // Verifica que se estén obteniendo los datos correctamente
+      personas = data;
+      renderLista();
     })
-    .then(function (data) {
-      Papa.parse(data, {
-        header: true, // Si la primera fila del archivo .csv contiene encabezados de columna
-        complete: function (rows) {
-          // Agrega a global
-          personas = rows.data;
-
-          // Mostrar todos los datos al cargar la página
-          renderLista();
-        },
-      });
-    });
+    .catch(error => console.error("Error al cargar datos:", error));
 }
 
 function transformarURLGoogleDrive(url) {
-  // Match both 'open?id=' or 'file/d/' formats in the same regex
   var regex = /https:\/\/drive\.google\.com\/(?:open\?id=|file\/d\/)([a-zA-Z0-9_-]+)/;
 
   // Check if the URL matches either of the formats
@@ -262,7 +248,6 @@ function transformarURLGoogleDrive(url) {
     return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
   }
 
-  // If no match is found, return the original URL
   return url;
 }
 
@@ -299,4 +284,20 @@ window.addEventListener("load", function () {
   });
 
   cargarDatos();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  filtroCampo = document.getElementById("filtro-campo");
+  filtroEntrada = document.getElementById("filtro-entrada");
+  filtroZona = document.getElementById("filtro-zona");
+
+  filtroCampo.addEventListener("change", function () {
+    if (filtroCampo.value === "zona") {
+      filtroEntrada.style.display = "none"; 
+      filtroZona.style.display = "block"; 
+    } else {
+      filtroZona.style.display = "none"; 
+      filtroEntrada.style.display = "block"; 
+    }
+  });
 });
